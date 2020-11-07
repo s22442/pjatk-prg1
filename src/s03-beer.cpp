@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include <cstdlib>
+#include <string>
 
 auto main(int argc, char *argv[]) -> int
 {
@@ -8,9 +8,13 @@ auto main(int argc, char *argv[]) -> int
     int beer;
 
     if (argv[1])
-        beer = atoi(argv[1]);
+    {
+        beer = std::stoi(argv[1]);
+    }
     else
+    {
         beer = 99;
+    }
 
     for (auto i = beer; i > 0; i--)
     {
