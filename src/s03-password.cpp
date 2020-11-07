@@ -11,12 +11,12 @@ auto main(int argc, char *argv[]) -> int
 
     auto const pwd = std::string{argv[1]};
 
-    std::string newPwd;
+    std::string new_pwd;
 
-    while (pwd != newPwd)
+    while (pwd != new_pwd)
     {
         std::cout << "\nPassword: ";
-        std::cin >> newPwd;
+        std::cin >> new_pwd;
     }
 
     std::cout << "\nOk!";
