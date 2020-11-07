@@ -11,7 +11,7 @@ auto main(int argc, char *argv[]) -> int
 
     auto const pwd = std::string{argv[1]};
 
-    std::string new_pwd;
+    auto new_pwd = std::string{};
 
     while (pwd != new_pwd)
     {
