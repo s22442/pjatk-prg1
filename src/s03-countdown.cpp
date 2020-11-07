@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include <cstdlib>
+#include <string>
 
 auto main(int argc, char *argv[]) -> int
 {
@@ -9,9 +9,7 @@ auto main(int argc, char *argv[]) -> int
         return 1;
     }
 
-    auto const count = atoi(argv[1]);
-
-    for (auto i = count; i >= 0; i--)
+    for (auto i = std::stoi(argv[1]); i >= 0; i--)
     {
         std::cout << i << "...\n";
     }
