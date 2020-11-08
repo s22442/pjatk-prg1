@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <random>
+#include <string>
 
 auto main() -> int
 {
@@ -9,16 +10,19 @@ auto main() -> int
 
     auto const guess_me = d100(rd);
 
-    auto input = int{};
+    auto raw_input = std::string{};
+    auto int_input = int{};
 
     while (true) {
         std::cout << "guess: ";
-        std::cin >> input;
+        std::getline(std::cin, raw_input);
 
-        if (input == guess_me)
+        int_input = std::stoi(raw_input);
+
+        if (int_input == guess_me)
             break;
 
-        if (input < guess_me) {
+        if (int_input < guess_me) {
             std::cout << "number too small!";
         } else {
             std::cout << "number too big!";
