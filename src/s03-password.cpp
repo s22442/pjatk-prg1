@@ -2,10 +2,9 @@
 #include <iostream>
 #include <string>
 
-auto main(int argc, char *argv[]) -> int
+auto main(int argc, char* argv[]) -> int
 {
-    if (argc == 0)
-    {
+    if (argc == 1) {
         return 1;
     }
 
@@ -13,10 +12,9 @@ auto main(int argc, char *argv[]) -> int
 
     auto new_pwd = std::string{};
 
-    while (pwd != new_pwd)
-    {
+    while (pwd != new_pwd) {
         std::cout << "\nPassword: ";
-        std::cin >> new_pwd;
+        std::getline(std::cin, new_pwd);
     }
 
     std::cout << "\nOk!";

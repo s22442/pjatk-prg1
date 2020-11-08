@@ -1,15 +1,13 @@
 
 #include <iostream>
 
-auto main(int argc, char *argv[]) -> int
+auto main(int argc, char* argv[]) -> int
 {
-    if (argc == 0)
-    {
+    if (argc == 0) {
         return 1;
     }
 
-    for (auto i = 1; i < argc; i++)
-    {
+    for (auto i = 1; i < argc; i++) {
         std::cout << " " << argv[i];
     }
 

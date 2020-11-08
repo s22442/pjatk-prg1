@@ -11,20 +11,16 @@ auto main() -> int
 
     auto input = int{};
 
-    while (true)
-    {
+    while (true) {
         std::cout << "guess: ";
         std::cin >> input;
 
         if (input == guess_me)
             break;
 
-        if (input < guess_me)
-        {
+        if (input < guess_me) {
             std::cout << "number too small!";
-        }
-        else
-        {
+        } else {
             std::cout << "number too big!";
         }
 
