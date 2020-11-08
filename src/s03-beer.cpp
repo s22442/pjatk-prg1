@@ -4,13 +4,7 @@
 
 auto main(int argc, char* argv[]) -> int
 {
-    int beer;
-
-    if (argv[1]) {
-        beer = std::stoi(argv[1]);
-    } else {
-        beer = 99;
-    }
+    int beer = argv[1] ? std::stoi(argv[1]) : 99;
 
     for (auto i = beer; i > 0; i--) {
         std::cout << i << " bottles of beer on the wall, " << i
