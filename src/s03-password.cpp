@@ -13,11 +13,11 @@ auto main(int argc, char* argv[]) -> int
     auto new_pwd = std::string{};
 
     while (pwd != new_pwd) {
-        std::cout << "\nPassword: ";
+        std::cout << "password: ";
         std::getline(std::cin, new_pwd);
     }
 
-    std::cout << "\nOk!";
+    std::cout << "ok!";
 
     return 0;
 }
