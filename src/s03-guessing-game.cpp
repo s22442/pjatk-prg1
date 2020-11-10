@@ -19,8 +19,9 @@ auto main() -> int
 
         int_input = std::stoi(raw_input);
 
-        if (int_input == guess_me)
+        if (int_input == guess_me) {
             break;
+        }
 
         if (int_input < guess_me) {
             std::cout << "number too small!";

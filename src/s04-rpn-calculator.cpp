@@ -53,7 +53,7 @@ auto evaluate_multiplication(std::stack<double>& stack) -> void
 auto evaluate_division(std::stack<double>& stack) -> void
 {
     if (stack.size() < 2) {
-        throw std::logic_error{"not enough operands for //"};
+        throw std::logic_error{"not enough operands for /"};
     }
     auto const b = pop_top(stack);
     auto const a = pop_top(stack);
@@ -63,7 +63,7 @@ auto evaluate_division(std::stack<double>& stack) -> void
 auto evaluate_integer_division(std::stack<double>& stack) -> void
 {
     if (stack.size() < 2) {
-        throw std::logic_error{"not enough operands for /"};
+        throw std::logic_error{"not enough operands for //"};
     }
     auto const b = pop_top(stack);
     auto const a = pop_top(stack);
@@ -100,6 +100,26 @@ auto evaluate_root(std::stack<double>& stack) -> void
     stack.push(pow(a, 1 / b));
 }
 
+auto evaluate_maximum(std::stack<double>& stack) -> void
+{
+    if (stack.size() < 2) {
+        throw std::logic_error{"not enough operands for max"};
+    }
+    auto const b = pop_top(stack);
+    auto const a = pop_top(stack);
+    stack.push(fmax(a, b));
+}
+
+auto evaluate_minimum(std::stack<double>& stack) -> void
+{
+    if (stack.size() < 2) {
+        throw std::logic_error{"not enough operands for min"};
+    }
+    auto const b = pop_top(stack);
+    auto const a = pop_top(stack);
+    stack.push(fmin(a, b));
+}
+
 
 auto make_args(int argc, char* argv[]) -> std::vector<std::string>
 {
@@ -133,6 +153,10 @@ auto main(int argc, char* argv[]) -> int
                 evaluate_exponentiation(stack);
             } else if (each == "sqrt") {
                 evaluate_root(stack);
+            } else if (each == "max") {
+                evaluate_maximum(stack);
+            } else if (each == "min") {
+                evaluate_minimum(stack);
             } else {
                 stack.push(std::stod(each));
             }

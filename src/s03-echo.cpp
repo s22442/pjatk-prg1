@@ -8,9 +8,8 @@
 auto main(int argc, char* argv[]) -> int
 {
     auto args = std::vector<std::string>{};
-    std::copy_n(argv, argc, std::back_inserter(args));
 
-    args.erase(args.begin());
+    std::copy(argv + 1, argv + argc, std::back_inserter(args));
 
     auto print_newline = true;
     auto reverse_args  = false;
