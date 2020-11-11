@@ -107,7 +107,7 @@ auto evaluate_maximum(std::stack<double>& stack) -> void
     }
     auto const b = pop_top(stack);
     auto const a = pop_top(stack);
-    stack.push(fmax(a, b));
+    stack.push(std::max(a, b));
 }
 
 auto evaluate_minimum(std::stack<double>& stack) -> void
@@ -117,7 +117,7 @@ auto evaluate_minimum(std::stack<double>& stack) -> void
     }
     auto const b = pop_top(stack);
     auto const a = pop_top(stack);
-    stack.push(fmin(a, b));
+    stack.push(std::min(a, b));
 }
 
 
