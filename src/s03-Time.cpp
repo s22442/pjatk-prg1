@@ -1,4 +1,4 @@
-#include <C:/Users/downl/pjatk-prg1/include/s22442/Time.h>
+#include <s22442/Time.h>
 
 #include <iostream>
 
