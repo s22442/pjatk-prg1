@@ -194,6 +194,21 @@ auto s22442::Time::operator!=(Time const& time) const -> bool
     return !operator==(time);
 }
 
+auto s22442::Time::count_minutes() const -> uint64_t
+{
+    return minutes + hours * 60;
+}
+
+auto s22442::Time::count_seconds() const -> uint64_t
+{
+    return seconds + count_minutes() * 60;
+}
+
+auto s22442::Time::time_to_midnight() const -> Time
+{
+    return Time{0, 0, 0}.operator-(Time{hours, minutes, seconds});
+}
+
 auto main() -> int
 {
     auto const SLIDE_25_HOUR   = int{23};
@@ -275,6 +290,18 @@ auto main() -> int
 
     std::cout << "Time A != Time B:\n";
     std::cout << slide_27_time_a.operator!=(slide_27_time_b) << "\n";
+
+    // Slide 28
+    std::cout << "** SLIDE 28 **\n";
+
+    std::cout << "Seconds of time A:\n";
+    std::cout << slide_27_time_a.count_seconds() << "\n";
+
+    std::cout << "Minutes of time A:\n";
+    std::cout << slide_27_time_a.count_minutes() << "\n";
+
+    std::cout << "Time until midnight for time A:\n";
+    std::cout << slide_27_time_a.time_to_midnight().to_string();
 
     return 0;
 }

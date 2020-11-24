@@ -41,6 +41,11 @@ struct Time {
     auto add_hours(int) -> void;
     auto add_minutes(int) -> void;
     auto add_seconds(int) -> void;
+
+    // Slide 28
+    auto count_seconds() const -> uint64_t;
+    auto count_minutes() const -> uint64_t;
+    auto time_to_midnight() const -> Time;
 };
 
 }  // namespace s22442
