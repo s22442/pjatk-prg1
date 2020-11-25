@@ -294,13 +294,13 @@ auto main() -> int
     // Slide 28
     std::cout << "** SLIDE 28 **\n";
 
-    std::cout << "Seconds of time A:\n";
+    std::cout << "Seconds of Time A:\n";
     std::cout << slide_27_time_a.count_seconds() << "\n";
 
-    std::cout << "Minutes of time A:\n";
+    std::cout << "Minutes of Time A:\n";
     std::cout << slide_27_time_a.count_minutes() << "\n";
 
-    std::cout << "Time until midnight for time A:\n";
+    std::cout << "Time until midnight for Time A:\n";
     std::cout << slide_27_time_a.time_to_midnight().to_string();
 
     return 0;
