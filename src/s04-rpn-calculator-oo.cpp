@@ -2,7 +2,7 @@
  * A reverse-polish notation calculator.
  */
 
-#include <C:/Users/downl/pjatk-prg1/include/s22442/RPN_calculator.h>
+#include <s22442/RPN_calculator.h>
 
 #include <algorithm>
 #include <cmath>
