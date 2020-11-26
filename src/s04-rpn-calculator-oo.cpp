@@ -2,7 +2,7 @@
  * A reverse-polish notation calculator.
  */
 
-#include <s22442/RPN_calculator.h>
+#include <RPN_calculator.h>
 
 #include <algorithm>
 #include <cmath>
