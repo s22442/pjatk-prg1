@@ -24,7 +24,7 @@ struct Time {
 
     // Slide 26
     auto time_of_day() const -> Time_of_day;
-    auto to_string(Time_of_day) const -> std::string;
+    auto to_string(Time_of_day const&) const -> std::string;
 
     // Slide 27
     auto operator+(Time const&) const -> Time;

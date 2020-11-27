@@ -56,20 +56,20 @@ auto s22442::Time::time_of_day() const -> Time_of_day
     return Time_of_day::Night;
 }
 
-auto s22442::Time::to_string(Time_of_day tod) const -> std::string
+auto s22442::Time::to_string(Time_of_day const& tod) const -> std::string
 {
     switch (tod) {
     case Time_of_day::Morning:
-        return "Morning\n";
+        return "Morning";
 
     case Time_of_day::Day:
-        return "Day\n";
+        return "Day";
 
     case Time_of_day::Evening:
-        return "Evening\n";
+        return "Evening";
 
     case Time_of_day::Night:
-        return "Night\n";
+        return "Night";
     }
 }
 
@@ -191,7 +191,7 @@ auto s22442::Time::operator==(Time const& time) const -> bool
 
 auto s22442::Time::operator!=(Time const& time) const -> bool
 {
-    return !operator==(time);
+    return !(*this == time);
 }
 
 auto s22442::Time::count_minutes() const -> uint64_t
@@ -206,7 +206,7 @@ auto s22442::Time::count_seconds() const -> uint64_t
 
 auto s22442::Time::time_to_midnight() const -> Time
 {
-    return Time{0, 0, 0}.operator-(Time{hours, minutes, seconds});
+    return Time{0, 0, 0} - *this;
 }
 
 auto main() -> int
@@ -253,43 +253,46 @@ auto main() -> int
     std::cout << "** SLIDE 26 **\n";
 
     std::cout << "Time of day:\n";
-    std::cout << slide_25_time.to_string(slide_25_time.time_of_day());
+    std::cout << slide_25_time.to_string(slide_25_time.time_of_day()) << "\n";
 
     // Slide 27
     std::cout << "** SLIDE 27 **\n";
 
     std::cout << "Time A:\n";
     std::cout << slide_27_time_a.to_string();
-    std::cout << slide_27_time_a.to_string(slide_27_time_a.time_of_day());
+    std::cout << slide_27_time_a.to_string(slide_27_time_a.time_of_day())
+              << "\n";
     std::cout << "Time B:\n";
     std::cout << slide_27_time_b.to_string();
-    std::cout << slide_27_time_b.to_string(slide_27_time_b.time_of_day());
+    std::cout << slide_27_time_b.to_string(slide_27_time_b.time_of_day())
+              << "\n";
 
-    auto slide_27_ab_addition_time = slide_27_time_a.operator+(slide_27_time_b);
-    auto slide_27_ab_subtraction_time =
-        slide_27_time_a.operator-(slide_27_time_b);
+    auto slide_27_ab_addition_time    = slide_27_time_a + slide_27_time_b;
+    auto slide_27_ab_subtraction_time = slide_27_time_a - slide_27_time_b;
 
     std::cout << "Time A + Time B:\n";
     std::cout << slide_27_ab_addition_time.to_string();
     std::cout << slide_27_ab_addition_time.to_string(
-        slide_27_ab_addition_time.time_of_day());
+        slide_27_ab_addition_time.time_of_day())
+              << "\n";
 
     std::cout << "Time A - Time B:\n";
     std::cout << slide_27_ab_subtraction_time.to_string();
     std::cout << slide_27_ab_subtraction_time.to_string(
-        slide_27_ab_subtraction_time.time_of_day());
+        slide_27_ab_subtraction_time.time_of_day())
+              << "\n";
 
     std::cout << "Time A < Time B:\n";
-    std::cout << slide_27_time_a.operator<(slide_27_time_b) << "\n";
+    std::cout << (slide_27_time_a < slide_27_time_b) << "\n";
 
     std::cout << "Time A > Time B:\n";
-    std::cout << slide_27_time_a.operator>(slide_27_time_b) << "\n";
+    std::cout << (slide_27_time_a > slide_27_time_b) << "\n";
 
     std::cout << "Time A == Time B:\n";
-    std::cout << slide_27_time_a.operator==(slide_27_time_b) << "\n";
+    std::cout << (slide_27_time_a == slide_27_time_b) << "\n";
 
     std::cout << "Time A != Time B:\n";
-    std::cout << slide_27_time_a.operator!=(slide_27_time_b) << "\n";
+    std::cout << (slide_27_time_a != slide_27_time_b) << "\n";
 
     // Slide 28
     std::cout << "** SLIDE 28 **\n";
