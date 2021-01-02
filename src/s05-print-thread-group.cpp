@@ -22,6 +22,7 @@ auto main() -> int
         for (auto j = 0; j < GROUP_SIZE; j++) {
             auto text = std::string{"Hello, "
                                     + std::to_string(j + i * GROUP_SIZE) + "!"};
+
             hello_threads.push_back(std::thread{print_string, std::move(text)});
         }
 
