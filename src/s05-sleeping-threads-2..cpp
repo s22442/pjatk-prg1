@@ -16,7 +16,7 @@ auto print_string_from_queue(std::queue<std::string>& queue,
         std::unique_lock<std::mutex> lck{mtx};
         cv.wait(lck);
 
-        auto line = queue.front();
+        auto line = std::string{queue.front()};
         queue.pop();
 
         if (line.empty()) {

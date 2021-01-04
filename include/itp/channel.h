@@ -1,3 +1,6 @@
+// Source:
+// https://git.sr.ht/~maelkum/education-introduction-to-programming-cxx/tree/master/item/include/itp/channel.h
+
 #ifndef INTRODUCTION_TO_PROGRAMMING_IN_CXX_CHANNEL_H
 #define INTRODUCTION_TO_PROGRAMMING_IN_CXX_CHANNEL_H
 
@@ -30,6 +33,9 @@ template<typename T> struct channel {
     }
 
   public:
+    channel(){};
+    channel(const channel<std::string>&){};
+
     auto wait() -> value_type
     {
         std::unique_lock<std::mutex> lck{m};
