@@ -9,7 +9,7 @@ auto print_string_from_queue(itp::channel<std::string>& ch, int const id)
     -> void
 {
     while (true) {
-        auto line = std::string{ch.wait()};
+        auto line = ch.wait();
 
         if (line.empty()) {
             std::cout << ("thread " + std::to_string(id) + " exiting\n");

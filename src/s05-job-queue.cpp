@@ -11,15 +11,16 @@ auto print_number_from_queue(std::queue<int>& queue,
                              int const id) -> void
 {
     while (true) {
-        if (queue.empty()) {
-            std::cout << ("thread " + std::to_string(id) + " exiting\n");
-            break;
-        }
-
         auto number = int{};
 
         {
             std::unique_lock<std::mutex> lck{mtx};
+
+            if (queue.empty()) {
+                std::cout << ("thread " + std::to_string(id) + " exiting\n");
+                break;
+            }
+
             number = queue.front();
             queue.pop();
         }

@@ -18,18 +18,19 @@ auto bounce(int& number,
             std::string const bounce_to) -> void
 {
     while (true) {
-        std::unique_lock<std::mutex> lck{mtx};
+        {
+            std::unique_lock<std::mutex> lck{mtx};
 
-        while (turn != id) {
-            cv.wait(lck);
+            while (turn != id) {
+                cv.wait(lck);
+            }
+
+            std::cout << (id + " " + std::to_string(number) + "\n");
+
+            number += d(rd);
+
+            turn = bounce_to;
         }
-
-        std::cout << (id + " " + std::to_string(number) + "\n");
-
-        number += d(rd);
-
-        turn = bounce_to;
-
         cv.notify_all();
 
         if (number > 1024) {

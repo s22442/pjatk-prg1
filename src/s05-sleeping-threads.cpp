@@ -19,6 +19,7 @@ auto print_string_from_queue(std::queue<std::string>& queue,
         std::unique_lock<std::mutex> lck{mtx};
 
         if (queue.empty()) {
+            lck.unlock();
             std::this_thread::sleep_for(std::chrono::milliseconds(d10_100(rd)));
             continue;
         }

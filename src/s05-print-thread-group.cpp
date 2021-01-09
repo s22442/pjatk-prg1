@@ -14,10 +14,10 @@ auto main() -> int
     auto const GROUP_SIZE  = int{6};
     auto const GROUP_COUNT = int{7};
 
-    std::vector<std::thread> hello_threads;
-
     for (auto i = 0; i < GROUP_COUNT; i++) {
         std::cout << "Group " << i << ":\n";
+
+        std::vector<std::thread> hello_threads;
 
         for (auto j = 0; j < GROUP_SIZE; j++) {
             auto text = std::string{"Hello, "
@@ -26,9 +26,8 @@ auto main() -> int
             hello_threads.push_back(std::thread{print_string, std::move(text)});
         }
 
-        auto const ht_size = hello_threads.size();
-        for (auto j = ht_size; j + GROUP_SIZE > ht_size; j--) {
-            hello_threads.at(j - 1).join();
+        for (auto& each : hello_threads) {
+            each.join();
         }
     }
 
