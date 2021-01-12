@@ -13,33 +13,55 @@
 
 auto main() -> int
 {
-    auto sock       = socket(AF_INET, SOCK_STREAM, 0);
-    auto const ip   = std::string{"127.0.0.1"};
-    auto const port = uint16_t{42420};
+    auto const SERVER_IP   = std::string{"127.0.0.1"};
+    auto const SERVER_PORT = uint16_t{42420};
+
+    auto sock = socket(AF_INET, SOCK_STREAM, 0);
 
     sockaddr_in addr;
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
-    addr.sin_port   = htobe16(port);
-    inet_pton(addr.sin_family, ip.c_str(), &addr.sin_addr);
+    addr.sin_port   = htobe16(SERVER_PORT);
+    inet_pton(addr.sin_family, SERVER_IP.c_str(), &addr.sin_addr);
 
-    connect(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
+    std::cout << "Connectig to " << SERVER_IP << ":"
+              << std::to_string(SERVER_PORT) << " ...\n";
 
-    {
-        auto data = std::string{};
+    auto server_sock =
+        connect(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
 
-        std::cout << "Send something to server: ";
-        std::getline(std::cin, data);
+    if (server_sock == -1) {
+        perror("Unable to connect to the sever");
+    } else {
+        std::cout << "Connected successfully!\n";
+        std::cout << "Send an empty line to terminate the connection and exit "
+                     "the program\n";
 
-        write(sock, data.data(), data.size());
-    }
-    {
-        std::array<char, 512> buffer{};
-        auto const n    = read(sock, buffer.data(), buffer.size());
-        auto const data = std::string{buffer.data(), buffer.data() + n};
+        while (true) {
+            {
+                auto data = std::string{};
 
-        std::cout << "DATA FROM SERVER:\n";
-        std::cout << data << "\n";
+                std::cout << "Send something to the server: ";
+                std::getline(std::cin, data);
+
+                if (data.empty()) {
+                    break;
+                }
+
+                write(sock, data.data(), data.size());
+            }
+            {
+                std::array<char, 512> buffer{};
+                auto const n = read(sock, buffer.data(), buffer.size());
+                if (n) {
+                    auto const data =
+                        std::string{buffer.data(), buffer.data() + n};
+
+                    std::cout << "DATA FROM THE SERVER:\n";
+                    std::cout << data << "\n";
+                }
+            }
+        }
     }
 
     shutdown(sock, SHUT_RDWR);
