@@ -11,6 +11,31 @@
 #include <iostream>
 #include <string>
 
+
+auto cat_file(std::string const& file_path) -> std::string
+{
+    auto fd = open(file_path.c_str(), O_RDONLY, S_IRUSR);
+
+    if (fd == -1) {
+        return ":-(";
+    }
+
+    std::array<char, 4096> buf{0};
+    auto const n = read(fd, buf.data(), buf.size());
+    close(fd);
+
+    if (n == -1) {
+        return std::string{"File " + file_path
+                           + " exists, but something went wrong"};
+    }
+
+    auto const cat_result = std::string{
+        file_path + "\n" + std::string{buf.data(), static_cast<size_t>(n)}};
+
+    return cat_result;
+}
+
+
 auto main() -> int
 {
     auto const IP   = std::string{"127.0.0.1"};
@@ -47,10 +72,13 @@ auto main() -> int
         {
             std::array<char, 512> buffer{};
             while (auto const n = read(client, buffer.data(), buffer.size())) {
-                auto const data = std::string{buffer.data(), buffer.data() + n};
+                auto const file_path =
+                    std::string{buffer.data(), buffer.data() + n};
 
-                std::cout << "DATA FROM THE CLIENT:\n";
-                std::cout << data << "\n";
+                std::cout << "FILE PATH FROM THE CLIENT:\n";
+                std::cout << file_path << "\n";
+
+                auto const data = cat_file(file_path);
 
                 write(client, data.data(), data.size());
             }
