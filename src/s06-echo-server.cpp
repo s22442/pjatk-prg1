@@ -34,9 +34,7 @@ auto accept_clients(int const& sock, sockaddr_in& addr_of_a_client) -> void
     while (auto client = accept(sock,
                                 reinterpret_cast<sockaddr*>(&addr_of_a_client),
                                 &addr_len)) {
-        if (client == -1) {
-            perror("Unable to answer a client");
-        } else {
+        if (client != -1) {
             std::array<char, INET_ADDRSTRLEN + 1> buffer{};
             inet_ntop(AF_INET,
                       &addr_of_a_client.sin_addr,

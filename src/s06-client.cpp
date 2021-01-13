@@ -63,7 +63,7 @@ auto main() -> int
         connect(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
 
     if (server_sock == -1) {
-        perror("Unable to connect to the sever");
+        perror("Unable to connect to the server");
     } else {
         std::cout << "Connected successfully!\n";
 
