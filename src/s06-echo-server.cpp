@@ -9,12 +9,75 @@
 
 #include <array>
 #include <iostream>
+#include <sstream>
 #include <string>
+#include <thread>
+
+
+auto read_from_client(int client, std::string const client_addr) -> void
+{
+    std::array<char, 512> buffer{};
+    while (auto const n = read(client, buffer.data(), buffer.size())) {
+        auto const data = std::string{buffer.data(), buffer.data() + n};
+
+        std::cout << client_addr << " >> " << data << "\n";
+
+        write(client, data.data(), data.size());
+    }
+}
+
+
+auto accept_clients(int const& sock, sockaddr_in& addr_of_a_client) -> void
+{
+    auto addr_len = socklen_t{sizeof(addr_of_a_client)};
+
+    while (auto client = accept(sock,
+                                reinterpret_cast<sockaddr*>(&addr_of_a_client),
+                                &addr_len)) {
+        if (client == -1) {
+            perror("Unable to answer a client");
+        } else {
+            std::array<char, INET_ADDRSTRLEN + 1> buffer{};
+            inet_ntop(AF_INET,
+                      &addr_of_a_client.sin_addr,
+                      buffer.data(),
+                      buffer.size());
+
+            auto tmp = std::ostringstream{};
+            tmp << buffer.data() << ":" << be16toh(addr_of_a_client.sin_port);
+            auto const client_addr = tmp.str();
+
+            std::cout << "Connection received from " << client_addr << "\n";
+
+            auto client_reader = std::thread{
+                read_from_client, std::move(client), std::move(client_addr)};
+            client_reader.detach();
+        }
+    }
+}
+
+
+auto await_exit_by_user() -> void
+{
+    auto input = std::string{};
+
+    while (true) {
+        std::getline(std::cin, input);
+
+        if (input == "exit") {
+            break;
+        }
+    }
+}
+
 
 auto main() -> int
 {
     auto const IP   = std::string{"127.0.0.1"};
     auto const PORT = uint16_t{42420};
+
+    std::cout << "Type \"exit\" to terminate the program\n";
+    auto await_exit = std::thread{await_exit_by_user};
 
     auto sock = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -29,34 +92,15 @@ auto main() -> int
     listen(sock, 0);
     std::cout << "Listening...\n";
 
-    sockaddr_in client_addr;
-    memset(&client_addr, 0, sizeof(client_addr));
-    auto client_len = socklen_t{sizeof(client_addr)};
-    auto client =
-        accept(sock, reinterpret_cast<sockaddr*>(&client_addr), &client_len);
+    sockaddr_in addr_of_a_client;
+    memset(&addr_of_a_client, 0, sizeof(addr_of_a_client));
 
-    if (client == -1) {
-        perror("Unable to answer a client");
-    } else {
-        std::array<char, INET_ADDRSTRLEN + 1> buffer{};
-        inet_ntop(AF_INET, &client_addr.sin_addr, buffer.data(), buffer.size());
+    auto accept_connections =
+        std::thread{accept_clients, std::ref(sock), std::ref(addr_of_a_client)};
 
-        std::cout << "Connection received from " << buffer.data() << ":"
-                  << be16toh(client_addr.sin_port) << "\n";
+    accept_connections.detach();
 
-        {
-            std::array<char, 512> buffer{};
-            while (auto const n = read(client, buffer.data(), buffer.size())) {
-                auto const data = std::string{buffer.data(), buffer.data() + n};
-
-                std::cout << "DATA FROM THE CLIENT:\n";
-                std::cout << data << "\n";
-
-                write(client, data.data(), data.size());
-            }
-        }
-    }
-
+    await_exit.join();
 
     shutdown(sock, SHUT_RDWR);
     close(sock);

@@ -38,8 +38,7 @@ auto read_from_server(int const& sock) -> void
     while (auto const n = read(sock, buffer.data(), buffer.size())) {
         auto const data = std::string{buffer.data(), buffer.data() + n};
 
-        std::cout << "DATA FROM THE SERVER:\n";
-        std::cout << data << "\n";
+        std::cout << "SERVER >> " << data << "\n";
     }
 }
 
