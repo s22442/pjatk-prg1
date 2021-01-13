@@ -15,7 +15,9 @@
 
 auto send_to_server(int const& sock) -> void
 {
-    std::cout << "Go ahead, type something:\n";
+    std::cout << "Send an empty line to terminate the connection and exit the "
+                 "program\n"
+              << "Go ahead, type something:\n";
 
     while (true) {
         auto data = std::string{};
@@ -65,8 +67,6 @@ auto main() -> int
         perror("Unable to connect to the sever");
     } else {
         std::cout << "Connected successfully!\n";
-        std::cout << "Send an empty line to terminate the connection and exit "
-                     "the program\n";
 
         auto to_server   = std::thread{send_to_server, std::ref(sock)};
         auto from_server = std::thread{read_from_server, std::ref(sock)};
