@@ -35,7 +35,7 @@ auto main() -> int
         while (auto const n = read(client, buffer.data(), buffer.size())) {
             auto const data = std::string{buffer.data(), buffer.data() + n};
 
-            std::cout << "DATA FROM A CLIENT:\n";
+            std::cout << "DATA FROM CLIENT:\n";
             std::cout << data << "\n";
 
             write(client, data.data(), data.size());
