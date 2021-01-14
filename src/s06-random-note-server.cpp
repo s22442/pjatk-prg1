@@ -38,10 +38,11 @@ auto read_from_client(int client,
 }
 
 
-auto accept_clients(int const& sock,
-                    sockaddr_in& addr_of_a_client,
-                    std::vector<std::string>& random_notes) -> void
+auto accept_clients(int const& sock, std::vector<std::string>& random_notes)
+    -> void
 {
+    sockaddr_in addr_of_a_client;
+    memset(&addr_of_a_client, 0, sizeof(addr_of_a_client));
     auto addr_len = socklen_t{sizeof(addr_of_a_client)};
 
     while (auto client = accept(sock,
@@ -107,13 +108,8 @@ auto main() -> int
     listen(sock, 0);
     std::cout << "Listening...\n";
 
-    sockaddr_in addr_of_a_client;
-    memset(&addr_of_a_client, 0, sizeof(addr_of_a_client));
-
-    auto accept_connections = std::thread{accept_clients,
-                                          std::ref(sock),
-                                          std::ref(addr_of_a_client),
-                                          std::ref(random_notes)};
+    auto accept_connections =
+        std::thread{accept_clients, std::ref(sock), std::ref(random_notes)};
 
     accept_connections.detach();
 
