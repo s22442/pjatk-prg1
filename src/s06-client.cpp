@@ -19,8 +19,8 @@ auto send_to_server(int const& sock) -> void
                  "program\n"
               << "Go ahead, type something:\n";
 
+    auto data = std::string{};
     while (true) {
-        auto data = std::string{};
         std::getline(std::cin, data);
 
         if (data.empty()) {
@@ -36,10 +36,16 @@ auto read_from_server(int const& sock) -> void
 {
     std::array<char, 512> buffer{};
     while (auto const n = read(sock, buffer.data(), buffer.size())) {
+        if (n == -1) {
+            break;
+        }
+
         auto const data = std::string{buffer.data(), buffer.data() + n};
 
         std::cout << "SERVER >> " << data << "\n";
     }
+
+    std::cout << "Connection to the server has been lost\n";
 }
 
 
@@ -65,7 +71,7 @@ auto main() -> int
     if (server_sock == -1) {
         perror("Unable to connect to the server");
     } else {
-        std::cout << "Connected successfully!\n";
+        std::cout << "Connected successfully\n";
 
         auto to_server   = std::thread{send_to_server, std::ref(sock)};
         auto from_server = std::thread{read_from_server, std::ref(sock)};
