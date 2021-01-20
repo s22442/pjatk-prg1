@@ -10,7 +10,16 @@ auto cat_file(std::string const& file_path) -> std::string
         return ":-(";
     }
 
-    std::array<char, 4096> buf{0};
+    struct stat info;
+    memset(&info, 0, sizeof(info));
+    auto const r = fstat(fd, &info);
+
+    if (r == -1) {
+        perror("Cannot read the file size");
+        return 1;
+    }
+
+    std::array<char, info.st_size> buf{0};
     auto const n = read(fd, buf.data(), buf.size());
     close(fd);
 

@@ -110,7 +110,6 @@ struct server {
         bind(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
 
         std::cout << "Type \"exit\" to terminate the program\n";
-        auto exit_awaitor = std::thread{[this] { await_exit_by_user(); }};
 
         listen(sock, 0);
         std::cout << "Listening...\n";
@@ -118,6 +117,7 @@ struct server {
         auto connection_accepter = std::thread{[this] { accept_clients(); }};
         connection_accepter.detach();
 
+        auto exit_awaitor = std::thread{[this] { await_exit_by_user(); }};
         exit_awaitor.join();
 
         shutdown(sock, SHUT_RDWR);
