@@ -16,6 +16,7 @@
 #include <sstream>
 #include <string>
 #include <thread>
+#include <vector>
 
 
 namespace s22442 {
@@ -24,14 +25,17 @@ struct server {
   private:
     sockaddr_in addr;
     int sock;
+    std::vector<int> clients;
 
     auto do_something_with_client_data(int const&, std::string const) const
         -> void;
 
 
-    auto read_from_client(int client, std::string const client_addr) const
-        -> void
+    auto read_from_client(int client, std::string const client_addr) -> void
     {
+        clients.push_back(std::ref(client));
+        auto const client_index = clients.end() - 1;
+
         std::array<char, 512> buffer{};
         while (auto const n = read(client, buffer.data(), buffer.size())) {
             if (n == -1) {
@@ -46,6 +50,11 @@ struct server {
         }
 
         std::cout << "Connection to " << client_addr << " has been closed\n";
+
+        shutdown(client, SHUT_RDWR);
+        close(client);
+
+        clients.erase(client_index);
     }
 
     auto accept_clients() -> void
@@ -120,6 +129,11 @@ struct server {
 
         auto exit_awaitor = std::thread{[this] { await_exit_by_user(); }};
         exit_awaitor.join();
+
+        for (auto& each : clients) {
+            shutdown(each, SHUT_RDWR);
+            close(each);
+        }
 
         shutdown(sock, SHUT_RDWR);
         close(sock);

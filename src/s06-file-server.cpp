@@ -18,7 +18,7 @@ auto cat_file(std::string const& file_path) -> std::string
         return "Cannot read the file size";
     }
 
-    std::array<char, info.st_size> buf{0};
+    std::vector<char> buf(info.st_size, 0);
     auto const n = read(fd, buf.data(), buf.size());
     close(fd);
 
