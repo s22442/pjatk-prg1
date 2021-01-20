@@ -15,8 +15,7 @@ auto cat_file(std::string const& file_path) -> std::string
     auto const r = fstat(fd, &info);
 
     if (r == -1) {
-        perror("Cannot read the file size");
-        return 1;
+        return "Cannot read the file size";
     }
 
     std::array<char, info.st_size> buf{0};
