@@ -31,11 +31,10 @@ struct server {
         -> void;
 
 
-    auto read_from_client(int client, std::string const client_addr) -> void
+    auto read_from_client(int client,
+                          std::string const client_addr,
+                          std::vector<int>::iterator const client_it) -> void
     {
-        clients.push_back(std::ref(client));
-        auto const client_index = clients.end() - 1;
-
         std::array<char, 512> buffer{};
         while (auto const n = read(client, buffer.data(), buffer.size())) {
             if (n == -1) {
@@ -54,7 +53,7 @@ struct server {
         shutdown(client, SHUT_RDWR);
         close(client);
 
-        clients.erase(client_index);
+        clients.erase(client_it);
     }
 
     auto accept_clients() -> void
@@ -84,8 +83,13 @@ struct server {
 
             std::cout << "Connection received from " << client_addr << "\n";
 
+            clients.push_back(std::ref(client));
+            auto const client_it = clients.end() - 1;
+
             auto client_reader = std::thread{[&] {
-                read_from_client(std::move(client), std::move(client_addr));
+                read_from_client(std::move(client),
+                                 std::move(client_addr),
+                                 std::move(client_it));
             }};
             client_reader.detach();
         }
